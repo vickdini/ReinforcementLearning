@@ -21,6 +21,7 @@
     <EnableUnmanagedDebugging>false</EnableUnmanagedDebugging>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="Cell.py" />
     <Compile Include="Controller.py" />
     <Compile Include="Grid.py" />
     <Compile Include="Reinforcement_Learning.py" />
