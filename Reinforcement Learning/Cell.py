@@ -1,5 +1,4 @@
 ﻿class Cell(object):
-    #type = ["empty", "wall", "robot"]
     EMPTY = "  "
     WALL = "██"
     ROBOT = "RR"

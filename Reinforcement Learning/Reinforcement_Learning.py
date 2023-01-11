@@ -3,11 +3,15 @@ from Controller import Controller
 from Grid import Grid
 from Robot import Robot
 
-print("From main")
-a = Grid()
+grid = Grid()
 b = Controller()
 c = Robot()
 
 d = Cell(Cell.EMPTY)
 
-a.printGrid()
+grid.printGrid()
+
+c.move(Robot.UP)
+c.peek(grid, Robot.RIGHT)
+
+print(grid.getSize()[0] - 1)

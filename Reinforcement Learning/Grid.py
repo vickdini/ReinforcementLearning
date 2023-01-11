@@ -13,6 +13,9 @@ class Grid(object):
             [Cell(Cell.WALL), Cell(Cell.WALL), Cell(Cell.EMPTY), Cell(Cell.EMPTY), Cell(Cell.EMPTY), Cell(Cell.WALL), Cell(Cell.EMPTY), Cell(Cell.EMPTY)]
             ]
 
+    def getSize(self):
+        return [len(self.layout), len(self.layout[0])]
+
     def printGrid(self):
         print()
 
@@ -30,5 +33,3 @@ class Grid(object):
             print(Cell.WALL, end = "")
         print(Cell.WALL + Cell.WALL)
         print()
-
-        print("This method prints the grid")
