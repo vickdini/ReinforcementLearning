@@ -26,7 +26,7 @@ class Grid(object):
         for row in self.layout:
             print(Cell.WALL, end = "")
             for cell in row:
-                print(cell.getChar(), end = "")
+                print(cell.getType(), end = "")
             print(Cell.WALL)
         
         for i in range(len(self.layout)):

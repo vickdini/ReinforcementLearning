@@ -5,13 +5,13 @@ from Robot import Robot
 
 grid = Grid()
 b = Controller()
-c = Robot()
+c = Robot([2, 1])
 
 d = Cell(Cell.EMPTY)
 
 grid.printGrid()
 
 c.move(Robot.UP)
-c.peek(grid, Robot.RIGHT)
+c.peek(grid, Robot.DOWN)
 
 print(grid.getSize()[0] - 1)

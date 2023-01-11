@@ -6,5 +6,5 @@
     def __init__(self, type):
         self.type = type
 
-    def getChar(self):
+    def getType(self):
         return self.type
