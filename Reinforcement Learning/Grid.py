@@ -16,6 +16,9 @@ class Grid(object):
     def getSize(self):
         return [len(self.layout), len(self.layout[0])]
 
+    def setCell(self, row, column, cellType):
+        self.layout[row][column] = Cell(cellType)
+
     def printGrid(self):
         print()
 
