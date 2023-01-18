@@ -1,20 +1,19 @@
-from Cell import Cell
 from Controller import Controller
 from Grid import Grid
 from Robot import Robot
 
 grid = Grid()
-b = Controller()
-robot1 = Robot([2, 1])
-robot2 = Robot([5, 6])
+target = [6, 3]
+controller = Controller(grid, target)
 
-d = Cell(Cell.EMPTY)
-
-grid.printGrid()
-
-robot1.move(grid, Robot.RIGHT)
-robot2.move(grid, Robot.DOWN)
+robot1 = Robot(grid, [2, 1])
+robot2 = Robot(grid, [5, 6])
 
 grid.printGrid()
 
-print(robot2.peek(grid, Robot.LEFT))
+robot1.move(Robot.RIGHT)
+robot2.move(Robot.DOWN)
+
+grid.printGrid()
+
+print(robot2.peek(Robot.LEFT))

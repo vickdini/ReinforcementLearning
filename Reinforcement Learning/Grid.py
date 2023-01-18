@@ -5,10 +5,10 @@ class Grid(object):
         self.layout = [
             [Cell(Cell.EMPTY), Cell(Cell.EMPTY), Cell(Cell.EMPTY), Cell(Cell.EMPTY), Cell(Cell.EMPTY), Cell(Cell.EMPTY), Cell(Cell.EMPTY), Cell(Cell.EMPTY)],
             [Cell(Cell.EMPTY), Cell(Cell.EMPTY), Cell(Cell.EMPTY), Cell(Cell.WALL), Cell(Cell.WALL), Cell(Cell.WALL), Cell(Cell.WALL), Cell(Cell.WALL)],
-            [Cell(Cell.EMPTY), Cell(Cell.ROBOT), Cell(Cell.EMPTY), Cell(Cell.WALL), Cell(Cell.EMPTY), Cell(Cell.EMPTY), Cell(Cell.EMPTY), Cell(Cell.EMPTY)],
+            [Cell(Cell.EMPTY), Cell(Cell.EMPTY), Cell(Cell.EMPTY), Cell(Cell.WALL), Cell(Cell.EMPTY), Cell(Cell.EMPTY), Cell(Cell.EMPTY), Cell(Cell.EMPTY)],
             [Cell(Cell.EMPTY), Cell(Cell.EMPTY), Cell(Cell.EMPTY), Cell(Cell.WALL), Cell(Cell.EMPTY), Cell(Cell.EMPTY), Cell(Cell.EMPTY), Cell(Cell.EMPTY)],
             [Cell(Cell.EMPTY), Cell(Cell.EMPTY), Cell(Cell.EMPTY), Cell(Cell.WALL), Cell(Cell.EMPTY), Cell(Cell.WALL), Cell(Cell.EMPTY), Cell(Cell.EMPTY)],
-            [Cell(Cell.EMPTY), Cell(Cell.EMPTY), Cell(Cell.EMPTY), Cell(Cell.EMPTY), Cell(Cell.EMPTY), Cell(Cell.WALL), Cell(Cell.ROBOT), Cell(Cell.EMPTY)],
+            [Cell(Cell.EMPTY), Cell(Cell.EMPTY), Cell(Cell.EMPTY), Cell(Cell.EMPTY), Cell(Cell.EMPTY), Cell(Cell.WALL), Cell(Cell.EMPTY), Cell(Cell.EMPTY)],
             [Cell(Cell.WALL), Cell(Cell.WALL), Cell(Cell.EMPTY), Cell(Cell.EMPTY), Cell(Cell.EMPTY), Cell(Cell.WALL), Cell(Cell.EMPTY), Cell(Cell.EMPTY)],
             [Cell(Cell.WALL), Cell(Cell.WALL), Cell(Cell.EMPTY), Cell(Cell.EMPTY), Cell(Cell.EMPTY), Cell(Cell.WALL), Cell(Cell.EMPTY), Cell(Cell.EMPTY)]
             ]
