@@ -4,13 +4,14 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="aea0f6f4-72fc-4081-9237-12cd75a97c5a" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/Reinforcement Learning/warehouse/envs/minigrid_env_mod.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Reinforcement Learning.sln" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Reinforcement Learning/Reinforcement Learning.pyproj" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Reinforcement Learning/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/Reinforcement Learning/main.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Reinforcement Learning/warehouse/envs/WarehouseEnv.py" beforeDir="false" afterPath="$PROJECT_DIR$/Reinforcement Learning/warehouse/envs/WarehouseEnv.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/warehouse_cpu.yml" beforeDir="false" afterPath="$PROJECT_DIR$/warehouse_cpu.yml" afterDir="false" />
+    <list default="true" id="aea0f6f4-72fc-4081-9237-12cd75a97c5a" name="Changes" comment="Changed to PyCharm and apparently fixed square around robot.">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Reinforcement Learning/Cell.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Reinforcement Learning/Controller.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Reinforcement Learning/Grid.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Reinforcement Learning/ManualControl.py" beforeDir="false" afterPath="$PROJECT_DIR$/Reinforcement Learning/ManualControl.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Reinforcement Learning/Robot.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Reinforcement Learning/main_old.py" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -19,6 +20,19 @@
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="GitHubPullRequestSearchHistory"><![CDATA[{
+  "lastFilter": {
+    "state": "OPEN"
+  }
+}]]></component>
+  <component name="GithubPullRequestsUISettings">
+    <option name="selectedUrlAndAccountId">
+      <UrlAndAccount>
+        <option name="accountId" value="a00e3e31-835f-4c15-a456-1aaabab356af" />
+        <option name="url" value="https://github.com/vickdini/ReinforcementLearning" />
+      </UrlAndAccount>
+    </option>
   </component>
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />
@@ -72,6 +86,25 @@
       <option name="presentableId" value="Default" />
       <updated>1674413315624</updated>
     </task>
+    <task id="LOCAL-00001" summary="Changed to PyCharm and apparently fixed square around robot.">
+      <created>1674417131798</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1674417131798</updated>
+    </task>
+    <task id="LOCAL-00002" summary="Changed to PyCharm and apparently fixed square around robot.">
+      <created>1674417155070</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1674417155070</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="Changed to PyCharm and apparently fixed square around robot." />
+    <option name="LAST_COMMIT_MESSAGE" value="Changed to PyCharm and apparently fixed square around robot." />
   </component>
 </project>

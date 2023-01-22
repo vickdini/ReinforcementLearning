@@ -14,7 +14,7 @@ class ManualControl:
         self.seed = seed
 
         if window is None:
-            window = Window("minigrid - " + str(env.__class__))
+            window = Window("Project 2 - Vick Dini")
         self.window = window
         self.window.reg_key_handler(self.key_handler)
 
