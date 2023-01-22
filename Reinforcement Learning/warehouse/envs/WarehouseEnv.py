@@ -9,13 +9,6 @@ from minigrid.minigrid_env import MiniGridEnv
 class WarehouseEnv(MiniGridEnv):
 
     """
-    ## Description
-
-    Classic four room reinforcement learning environment. The agent must
-    navigate in a maze composed of four rooms interconnected by 4 gaps in the
-    walls. To obtain a reward, the agent must reach the green goal square. Both
-    the agent and the goal square are randomly placed in any of the four rooms.
-
     ## Mission Space
 
     "reach the goal"
@@ -32,14 +25,6 @@ class WarehouseEnv(MiniGridEnv):
     | 5   | toggle       | Unused       |
     | 6   | done         | Unused       |
 
-    ## Observation Encoding
-
-    - Each tile is encoded as a 3 dimensional tuple:
-        `(OBJECT_IDX, COLOR_IDX, STATE)`
-    - `OBJECT_TO_IDX` and `COLOR_TO_IDX` mapping can be found in
-        [minigrid/minigrid.py](minigrid/minigrid.py)
-    - `STATE` refers to the door state with 0=open, 1=closed and 2=locked
-
     ## Rewards
 
     A reward of '1' is given for success, and '0' for failure.
@@ -51,17 +36,13 @@ class WarehouseEnv(MiniGridEnv):
     1. The agent reaches the goal.
     2. Timeout (see `max_steps`).
 
-    ## Registered Configurations
-
-    - `MiniGrid-FourRooms-v0`
-
     """
 
     def __init__(self, agent_pos=None, goal_pos=None, max_steps=100, **kwargs):
         self._agent_default_pos = agent_pos
         self._goal_default_pos = goal_pos
 
-        self.size = 19
+        self.size = 10
         mission_space = MissionSpace(mission_func=self._gen_mission)
 
         super().__init__(
@@ -86,30 +67,14 @@ class WarehouseEnv(MiniGridEnv):
         self.grid.vert_wall(0, 0)
         self.grid.vert_wall(width - 1, 0)
 
-        room_w = width // 2
-        room_h = height // 2
+        # Generate the internal walls
+        self.grid.horz_wall(4, 2)
+        self.grid.vert_wall(4, 3, length=3)
 
-        # For each row of rooms
-        for j in range(0, 2):
+        self.grid.vert_wall(1, 7, length=2)
+        self.grid.vert_wall(2, 7, length=2)
 
-            # For each column
-            for i in range(0, 2):
-                xL = i * room_w
-                yT = j * room_h
-                xR = xL + room_w
-                yB = yT + room_h
-
-                # Bottom wall and door
-                if i + 1 < 2:
-                    self.grid.vert_wall(xR, yT, room_h)
-                    pos = (xR, self._rand_int(yT + 1, yB))
-                    self.grid.set(*pos, None)
-
-                # Bottom wall and door
-                if j + 1 < 2:
-                    self.grid.horz_wall(xL, yB, room_w)
-                    pos = (self._rand_int(xL + 1, xR), yB)
-                    self.grid.set(*pos, None)
+        self.grid.vert_wall(6, 5, length=4)
 
         # Randomize the player start position and orientation
         if self._agent_default_pos is not None:

@@ -1,5 +1,3 @@
-#!/usr/bin/env python3
-
 from __future__ import annotations
 
 import gymnasium as gym
@@ -84,38 +82,13 @@ class ManualControl:
 
 
 if __name__ == "__main__":
-    import argparse
+    env = gym.make("WarehouseEnv", agent_pos=(2, 3), goal_pos=(4, 8))
+    agent_view = False
 
-    parser = argparse.ArgumentParser()
-    parser.add_argument(
-        "--env", help="gym environment to load", default="MiniGrid-MultiRoom-N6-v0"
-    )
-    parser.add_argument(
-        "--seed",
-        type=int,
-        help="random seed to generate the environment with",
-        default=None,
-    )
-    parser.add_argument(
-        "--tile-size", type=int, help="size at which to render tiles", default=32
-    )
-    parser.add_argument(
-        "--agent-view",
-        default=False,
-        help="draw the agent sees (partially observable view)",
-        action="store_true",
-    )
-
-    args = parser.parse_args()
-
-    env = gym.make("WarehouseEnv")
-
-    # env: MiniGridEnv = gym.make(args.env, tile_size=args.tile_size)
-
-    if args.agent_view:
+    if agent_view:
         print("Using agent view")
         env = RGBImgPartialObsWrapper(env, env.tile_size)
         env = ImgObsWrapper(env)
 
-    manual_control = ManualControl(env, agent_view=args.agent_view, seed=args.seed)
+    manual_control = ManualControl(env, agent_view=agent_view, seed=None)
     manual_control.start()
