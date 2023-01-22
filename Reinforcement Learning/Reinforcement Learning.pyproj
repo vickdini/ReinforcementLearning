@@ -25,15 +25,28 @@
   <ItemGroup>
     <Compile Include="Cell.py" />
     <Compile Include="Controller.py" />
-    <Compile Include="WarehouseEnv.py" />
     <Compile Include="Grid.py" />
     <Compile Include="main_old.py" />
     <Compile Include="main.py" />
     <Compile Include="Robot.py" />
+    <Compile Include="warehouse\envs\WarehouseEnv.py" />
+    <Compile Include="warehouse\envs\__init__.py" />
+    <Compile Include="warehouse\__init__.py" />
   </ItemGroup>
   <ItemGroup>
     <InterpreterReference Include="CondaEnv|CondaEnv|env" />
     <InterpreterReference Include="CondaEnv|CondaEnv|warehouse" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="warehouse\" />
+    <Folder Include="warehouse\envs\" />
+    <Folder Include="warehouse\envs\__pycache__\" />
+    <Folder Include="warehouse\__pycache__\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="warehouse\envs\__pycache__\WarehouseEnv.cpython-310.pyc" />
+    <Content Include="warehouse\envs\__pycache__\__init__.cpython-310.pyc" />
+    <Content Include="warehouse\__pycache__\__init__.cpython-310.pyc" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\Python Tools\Microsoft.PythonTools.targets" />
   <!-- Uncomment the CoreCompile target to enable the Build command in
