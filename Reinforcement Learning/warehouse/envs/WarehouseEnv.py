@@ -75,7 +75,7 @@ class WarehouseEnv(MiniGridEnvMod):
 
     @staticmethod
     def _gen_mission():
-        return "reach the goal"
+        return "Reach the target location"
 
     def _gen_grid(self, width, height):
         # Create the grid
