@@ -3,7 +3,8 @@
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>aaebb740-8549-40b9-8873-49f42e65ef82</ProjectGuid>
-    <ProjectHome>.</ProjectHome>
+    <ProjectHome>
+    </ProjectHome>
     <StartupFile>main.py</StartupFile>
     <SearchPath>
     </SearchPath>
@@ -24,7 +25,7 @@
   <ItemGroup>
     <Compile Include="Cell.py" />
     <Compile Include="Controller.py" />
-    <Compile Include="fourrooms.py" />
+    <Compile Include="WarehouseEnv.py" />
     <Compile Include="Grid.py" />
     <Compile Include="main_old.py" />
     <Compile Include="main.py" />

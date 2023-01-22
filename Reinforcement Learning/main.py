@@ -7,6 +7,7 @@ import gymnasium as gym
 from minigrid.minigrid_env import MiniGridEnv
 from minigrid.utils.window import Window
 from minigrid.wrappers import ImgObsWrapper, RGBImgPartialObsWrapper
+import warehouse
 
 
 class ManualControl:
@@ -107,7 +108,9 @@ if __name__ == "__main__":
 
     args = parser.parse_args()
 
-    env: MiniGridEnv = gym.make(args.env, tile_size=args.tile_size)
+    env = gym.make("WarehouseEnv")
+
+    # env: MiniGridEnv = gym.make(args.env, tile_size=args.tile_size)
 
     if args.agent_view:
         print("Using agent view")

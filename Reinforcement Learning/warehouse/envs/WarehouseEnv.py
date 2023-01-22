@@ -6,7 +6,7 @@ from minigrid.core.world_object import Goal
 from minigrid.minigrid_env import MiniGridEnv
 
 
-class FourRoomsEnv(MiniGridEnv):
+class WarehouseEnv(MiniGridEnv):
 
     """
     ## Description
