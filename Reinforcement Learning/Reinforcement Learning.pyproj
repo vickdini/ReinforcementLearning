@@ -4,7 +4,7 @@
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>aaebb740-8549-40b9-8873-49f42e65ef82</ProjectGuid>
     <ProjectHome>.</ProjectHome>
-    <StartupFile>Reinforcement_Learning.py</StartupFile>
+    <StartupFile>main.py</StartupFile>
     <SearchPath>
     </SearchPath>
     <WorkingDirectory>.</WorkingDirectory>
@@ -24,7 +24,7 @@
     <Compile Include="Cell.py" />
     <Compile Include="Controller.py" />
     <Compile Include="Grid.py" />
-    <Compile Include="Reinforcement_Learning.py" />
+    <Compile Include="main.py" />
     <Compile Include="Robot.py" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\Python Tools\Microsoft.PythonTools.targets" />

@@ -1,0 +1,17 @@
+name: warehouse
+channels:
+  - pytorch
+  - conda-forge
+  - defaults
+dependencies:
+  - python=3.10
+  - pip=22.3.1
+  - gym
+  - matplotlib
+  - numpy
+  - pandas
+  - pytorch
+  - tensorboard
+  - pip:
+    - gym-minigrid
+    - tensorboardx
