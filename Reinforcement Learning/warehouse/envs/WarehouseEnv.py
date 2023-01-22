@@ -3,10 +3,12 @@ from __future__ import annotations
 from minigrid.core.grid import Grid
 from minigrid.core.mission import MissionSpace
 from minigrid.core.world_object import Goal
-from minigrid.minigrid_env import MiniGridEnv
+from warehouse.envs.minigrid_env_mod import MiniGridEnvMod
+
+from gymnasium import spaces
 
 
-class WarehouseEnv(MiniGridEnv):
+class WarehouseEnv(MiniGridEnvMod):
 
     """
     ## Mission Space
@@ -25,6 +27,14 @@ class WarehouseEnv(MiniGridEnv):
     | 5   | toggle       | Unused       |
     | 6   | done         | Unused       |
 
+    ## Observation Encoding
+
+    - Each tile is encoded as a 3 dimensional tuple:
+        `(OBJECT_IDX, COLOR_IDX, STATE)`
+    - `OBJECT_TO_IDX` and `COLOR_TO_IDX` mapping can be found in
+        [minigrid/minigrid.py](minigrid/minigrid.py)
+    - `STATE` refers to the door state with 0=open, 1=closed and 2=locked
+
     ## Rewards
 
     A reward of '1' is given for success, and '0' for failure.
@@ -42,6 +52,7 @@ class WarehouseEnv(MiniGridEnv):
         self._agent_default_pos = agent_pos
         self._goal_default_pos = goal_pos
 
+        # Grid size (in cells, per side): left border + 8 cells + right border
         self.size = 10
         mission_space = MissionSpace(mission_func=self._gen_mission)
 
@@ -49,9 +60,18 @@ class WarehouseEnv(MiniGridEnv):
             mission_space=mission_space,
             width=self.size,
             height=self.size,
+            agent_view_size=3,
             max_steps=max_steps,
             **kwargs,
         )
+
+        # Actions are discrete integer values
+        #self.action_space = spaces.Discrete(len(self.actions))
+        
+        # The amount of observations corresponds to the number of cells in the grid (8x8)
+        #num_states = 64
+        #self.observation_space = spaces.Discrete(num_states)
+
 
     @staticmethod
     def _gen_mission():

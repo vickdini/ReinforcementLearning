@@ -1,4 +1,4 @@
-name: warehouse
+name: warehouseProject
 channels:
   - pytorch
   - conda-forge

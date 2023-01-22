@@ -1,85 +1,14 @@
 from __future__ import annotations
 
 import gymnasium as gym
-
-from minigrid.minigrid_env import MiniGridEnv
-from minigrid.utils.window import Window
 from minigrid.wrappers import ImgObsWrapper, RGBImgPartialObsWrapper
-import warehouse
 
+import torch as t
+from tensorboardX import SummaryWriter
+import numpy as np
 
-class ManualControl:
-    def __init__(
-        self,
-        env: MiniGridEnv,
-        agent_view: bool = False,
-        window: Window = None,
-        seed=None,
-    ) -> None:
-        self.env = env
-        self.agent_view = agent_view
-        self.seed = seed
-
-        if window is None:
-            window = Window("minigrid - " + str(env.__class__))
-        self.window = window
-        self.window.reg_key_handler(self.key_handler)
-
-    def start(self):
-        """Start the window display with blocking event loop"""
-        self.reset(self.seed)
-        self.window.show(block=True)
-
-    def step(self, action: MiniGridEnv.Actions):
-        _, reward, terminated, truncated, _ = self.env.step(action)
-        print(f"step={self.env.step_count}, reward={reward:.2f}")
-
-        if terminated:
-            print("terminated!")
-            self.reset(self.seed)
-        elif truncated:
-            print("truncated!")
-            self.reset(self.seed)
-        else:
-            self.redraw()
-
-    def redraw(self):
-        frame = self.env.get_frame(agent_pov=self.agent_view)
-        self.window.show_img(frame)
-
-    def reset(self, seed=None):
-        self.env.reset(seed=seed)
-
-        if hasattr(self.env, "mission"):
-            print("Mission: %s" % self.env.mission)
-            self.window.set_caption(self.env.mission)
-
-        self.redraw()
-
-    def key_handler(self, event):
-        key: str = event.key
-        print("pressed", key)
-
-        if key == "escape":
-            self.window.close()
-            return
-        if key == "backspace":
-            self.reset()
-            return
-
-        key_to_action = {
-            "left": MiniGridEnv.Actions.left,
-            "right": MiniGridEnv.Actions.right,
-            "up": MiniGridEnv.Actions.forward,
-            " ": MiniGridEnv.Actions.toggle,
-            "pageup": MiniGridEnv.Actions.pickup,
-            "pagedown": MiniGridEnv.Actions.drop,
-            "enter": MiniGridEnv.Actions.done,
-        }
-
-        action = key_to_action[key]
-        self.step(action)
-
+import warehouse, model
+from ManualControl import ManualControl
 
 if __name__ == "__main__":
     env = gym.make("WarehouseEnv", agent_pos=(2, 3), goal_pos=(4, 8))
@@ -90,5 +19,23 @@ if __name__ == "__main__":
         env = RGBImgPartialObsWrapper(env, env.tile_size)
         env = ImgObsWrapper(env)
 
+    writer = SummaryWriter("./logs")
+
+    episodes = 100
+    steps = 5000
+    # scores = []
+    # eps_history = []
+    # losses = []
+
+    #agent = model.DQN(
+    #    n_features=env.observation_space[0].shape[0],
+    #    n_actions=4,
+    #    lr=1e-3,
+    #    reward_decay=0.99,
+    #    epsilon=1.0,
+    #    eps_dec=1e-5,
+    #    eps_min=1e-2)
+
     manual_control = ManualControl(env, agent_view=agent_view, seed=None)
     manual_control.start()
+
