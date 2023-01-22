@@ -11,6 +11,7 @@
     <OutputPath>.</OutputPath>
     <Name>Reinforcement Learning</Name>
     <RootNamespace>Reinforcement Learning</RootNamespace>
+    <InterpreterId>CondaEnv|CondaEnv|env</InterpreterId>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
     <DebugSymbols>true</DebugSymbols>
@@ -23,9 +24,15 @@
   <ItemGroup>
     <Compile Include="Cell.py" />
     <Compile Include="Controller.py" />
+    <Compile Include="fourrooms.py" />
     <Compile Include="Grid.py" />
+    <Compile Include="main_old.py" />
     <Compile Include="main.py" />
     <Compile Include="Robot.py" />
+  </ItemGroup>
+  <ItemGroup>
+    <InterpreterReference Include="CondaEnv|CondaEnv|env" />
+    <InterpreterReference Include="CondaEnv|CondaEnv|warehouse" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\Python Tools\Microsoft.PythonTools.targets" />
   <!-- Uncomment the CoreCompile target to enable the Build command in
