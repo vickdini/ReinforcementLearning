@@ -4,13 +4,13 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="aea0f6f4-72fc-4081-9237-12cd75a97c5a" name="Changes" comment="Fixed the robot's view and deleted the old project files.">
-      <change afterPath="$PROJECT_DIR$/.idea/Source Code.iml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/profiles_settings.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
+    <list default="true" id="aea0f6f4-72fc-4081-9237-12cd75a97c5a" name="Changes" comment="Small update.">
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Reinforcement Learning/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/Reinforcement Learning/main.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Reinforcement Learning/model.py" beforeDir="false" afterPath="$PROJECT_DIR$/Reinforcement Learning/model.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Reinforcement Learning/warehouse/envs/WarehouseEnv.py" beforeDir="false" afterPath="$PROJECT_DIR$/Reinforcement Learning/warehouse/envs/WarehouseEnv.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Reinforcement Learning/warehouse/envs/minigrid_env_mod.py" beforeDir="false" afterPath="$PROJECT_DIR$/Reinforcement Learning/warehouse/envs/minigrid_env_mod.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -41,16 +41,16 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "ASKED_SHARE_PROJECT_CONFIGURATION_FILES": "true",
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
-    "last_opened_file_path": "D:/OneDrive/Documents/09 POLIMI PhD/Corsi/2022-2023/Artificial Intelligence in Decision Making and Control of Industrial Applications/Homework 2/Source Code",
-    "settings.editor.selected.configurable": "preferences.lookFeel"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;ASKED_SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/vick_/OneDrive/Documents/09 POLIMI PhD/Corsi/2022-2023/Artificial Intelligence in Decision Making and Control of Industrial Applications/Homework 2/Source Code&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable&quot;
   }
-}]]></component>
+}</component>
   <component name="RunManager">
     <configuration name="main" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="Source Code" />
@@ -59,7 +59,7 @@
       <envs>
         <env name="PYTHONUNBUFFERED" value="1" />
       </envs>
-      <option name="SDK_HOME" value="C:\Users\Vick\anaconda3\envs\warehouseProject\python.exe" />
+      <option name="SDK_HOME" value="C:\Users\vick_\anaconda3\envs\warehouseProject\python.exe" />
       <option name="SDK_NAME" value="warehouseProject" />
       <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/Reinforcement Learning" />
       <option name="IS_MODULE_SDK" value="false" />
@@ -110,12 +110,41 @@
       <option name="project" value="LOCAL" />
       <updated>1674419500340</updated>
     </task>
-    <option name="localTasksCounter" value="4" />
+    <task id="LOCAL-00004" summary="Small update.">
+      <created>1674424433890</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1674424433890</updated>
+    </task>
+    <option name="localTasksCounter" value="5" />
     <servers />
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Changed to PyCharm and apparently fixed square around robot." />
     <MESSAGE value="Fixed the robot's view and deleted the old project files." />
-    <option name="LAST_COMMIT_MESSAGE" value="Fixed the robot's view and deleted the old project files." />
+    <MESSAGE value="Small update." />
+    <option name="LAST_COMMIT_MESSAGE" value="Small update." />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/Reinforcement Learning/warehouse/envs/minigrid_env_mod.py</url>
+          <line>162</line>
+          <option name="timeStamp" value="8" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/Reinforcement Learning/warehouse/envs/minigrid_env_mod.py</url>
+          <line>500</line>
+          <option name="timeStamp" value="38" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/Reinforcement Learning/warehouse/envs/minigrid_env_mod.py</url>
+          <line>554</line>
+          <option name="timeStamp" value="39" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
   </component>
 </project>

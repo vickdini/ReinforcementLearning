@@ -27,13 +27,9 @@ class WarehouseEnv(MiniGridEnvMod):
     | 5   | toggle       | Unused       |
     | 6   | done         | Unused       |
 
-    ## Observation Encoding
+    ## Observations
 
-    - Each tile is encoded as a 3 dimensional tuple:
-        `(OBJECT_IDX, COLOR_IDX, STATE)`
-    - `OBJECT_TO_IDX` and `COLOR_TO_IDX` mapping can be found in
-        [minigrid/minigrid.py](minigrid/minigrid.py)
-    - `STATE` refers to the door state with 0=open, 1=closed and 2=locked
+    The observations consist of the part of the grid that the agent currently sees.
 
     ## Rewards
 

@@ -80,21 +80,24 @@ class MiniGridEnvMod(gym.Env):
         assert agent_view_size >= 3
         self.agent_view_size = agent_view_size
 
+        # The observations are comprised of a snapshot of what the agent is currently seeing and the direction it's facing.
+        self.observation_space = spaces.Discrete(agent_view_size ** 2 + 1)
+
         # Observations are dictionaries containing an
         # encoding of the grid and a textual 'mission' string
-        image_observation_space = spaces.Box(
-            low=0,
-            high=255,
-            shape=(self.agent_view_size, self.agent_view_size, 3),
-            dtype="uint8",
-        )
-        self.observation_space = spaces.Dict(
-            {
-                "image": image_observation_space,
-                "direction": spaces.Discrete(4),
-                "mission": mission_space,
-            }
-        )
+        # image_observation_space = spaces.Box(
+        #     low=0,
+        #     high=255,
+        #     shape=(self.agent_view_size, self.agent_view_size, 3),
+        #     dtype="uint8",
+        # )
+        # self.observation_space = spaces.Dict(
+        #     {
+        #         "image": image_observation_space,
+        #         "direction": spaces.Discrete(4),
+        #         "mission": mission_space,
+        #     }
+        # )
 
         # Range of possible rewards
         self.reward_range = (0, 1)
@@ -159,7 +162,7 @@ class MiniGridEnvMod(gym.Env):
         # Return first observation
         obs = self.gen_obs()
 
-        return obs, {}
+        return obs
 
     def hash(self, size=16):
         """Compute a hash that uniquely identifies the current state of the environment.
@@ -456,27 +459,11 @@ class MiniGridEnvMod(gym.Env):
 
         agent_view_size = agent_view_size or self.agent_view_size
 
-        # Facing right
-        if self.agent_dir == 0:
-            topX = self.agent_pos[0]
-            topY = self.agent_pos[1] - agent_view_size // 2
-        # Facing down
-        elif self.agent_dir == 1:
-            topX = self.agent_pos[0] - agent_view_size // 2
-            topY = self.agent_pos[1]
-        # Facing left
-        elif self.agent_dir == 2:
-            topX = self.agent_pos[0] - agent_view_size + 1
-            topY = self.agent_pos[1] - agent_view_size // 2
-        # Facing up
-        elif self.agent_dir == 3:
-            topX = self.agent_pos[0] - agent_view_size // 2
-            topY = self.agent_pos[1] - agent_view_size + 1
-        else:
-            assert False, "invalid agent direction"
+        topX = self.agent_pos[0] - agent_view_size // 2
+        topY = self.agent_pos[1] - agent_view_size // 2
 
-        botX = topX + agent_view_size
-        botY = topY + agent_view_size
+        botX = topX + agent_view_size - agent_view_size // 2
+        botY = topY + agent_view_size - agent_view_size // 2
 
         return (topX, topY, botX, botY)
 
@@ -577,32 +564,13 @@ class MiniGridEnvMod(gym.Env):
         if agent_view_size is None, self.agent_view_size is used
         """
 
-        topX, topY, botX, botY = self.get_view_exts(agent_view_size)
+        topX, topY, botX, botY = self.get_view_exts(self.agent_view_size)
 
         agent_view_size = agent_view_size or self.agent_view_size
 
         grid = self.grid.slice(topX, topY, agent_view_size, agent_view_size)
 
-        for i in range(self.agent_dir + 1):
-            grid = grid.rotate_left()
-
-        # Process occluders and visibility
-        # Note that this incurs some performance cost
-        if not self.see_through_walls:
-            vis_mask = grid.process_vis(
-                agent_pos=(agent_view_size // 2, agent_view_size - 1)
-            )
-        else:
-            vis_mask = np.ones(shape=(grid.width, grid.height), dtype=bool)
-
-        # Make it so the agent sees what it's carrying
-        # We do this by placing the carried object at the agent's position
-        # in the agent's partially observable view
-        agent_pos = grid.width // 2, grid.height - 1
-        if self.carrying:
-            grid.set(*agent_pos, self.carrying)
-        else:
-            grid.set(*agent_pos, None)
+        vis_mask = np.ones(shape=(grid.width, grid.height), dtype=bool)
 
         return grid, vis_mask
 
@@ -613,14 +581,7 @@ class MiniGridEnvMod(gym.Env):
 
         grid, vis_mask = self.gen_obs_grid()
 
-        # Encode the partially observable view into a numpy array
-        image = grid.encode(vis_mask)
-
-        # Observations are dictionaries containing:
-        # - an image (partially observable view of the environment)
-        # - the agent's direction/orientation (acting as a compass)
-        # - a textual mission string (instructions for the agent)
-        obs = {"image": image, "direction": self.agent_dir, "mission": self.mission}
+        obs = {"grid": grid.grid, "mask": vis_mask, "direction": self.agent_dir}
 
         return obs
 

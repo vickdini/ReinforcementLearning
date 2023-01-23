@@ -48,7 +48,7 @@ class DQN(nn.Module):
         self.net = FeedForwardNN(n_features, n_actions)
 
         # optimizer, loss function and device
-        self.optimzer = optim.Adam(self.parameters(), lr=self.lr)
+        self.optimizer = optim.Adam(self.parameters(), lr=self.lr)
         self.device = t.device("cuda:0" if t.cuda.is_available() else "cpu")
         self.to(self.device)
         self.lossfunc = nn.MSELoss()
@@ -68,7 +68,7 @@ class DQN(nn.Module):
         return action
 
     def learn(self, state, action, reward, state_):
-        self.optimzer.zero_grad()
+        self.optimizer.zero_grad()
         states = t.FloatTensor(state).to(self.device)
         actions = t.tensor(action).to(self.device)
         rewards = t.tensor(reward, dtype=t.float32).to(self.device)
@@ -80,7 +80,7 @@ class DQN(nn.Module):
 
         loss = self.lossfunc(q_pred, q_target)
         loss.backward()
-        self.optimzer.step()
+        self.optimizer.step()
         self._decrement_epsilon()
         return loss.item()
 

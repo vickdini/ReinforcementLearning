@@ -27,14 +27,14 @@ if __name__ == "__main__":
     # eps_history = []
     # losses = []
 
-    #agent = model.DQN(
-    #    n_features=env.observation_space[0].shape[0],
-    #    n_actions=4,
-    #    lr=1e-3,
-    #    reward_decay=0.99,
-    #    epsilon=1.0,
-    #    eps_dec=1e-5,
-    #    eps_min=1e-2)
+    agent = model.DQN(
+       n_features=env.observation_space.n,
+       n_actions=env.action_space.n,
+       lr=1e-3,
+       reward_decay=0.99,
+       epsilon=1.0,
+       eps_dec=1e-5,
+       eps_min=1e-2)
 
     manual_control = ManualControl(env, agent_view=agent_view, seed=None)
     manual_control.start()
