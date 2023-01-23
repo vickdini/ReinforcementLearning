@@ -4,12 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="aea0f6f4-72fc-4081-9237-12cd75a97c5a" name="Changes" comment="Small update.">
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+    <list default="true" id="aea0f6f4-72fc-4081-9237-12cd75a97c5a" name="Changes" comment="Solved the agent's view subgrid and observations.">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Reinforcement Learning/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/Reinforcement Learning/main.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Reinforcement Learning/model.py" beforeDir="false" afterPath="$PROJECT_DIR$/Reinforcement Learning/model.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Reinforcement Learning/warehouse/envs/WarehouseEnv.py" beforeDir="false" afterPath="$PROJECT_DIR$/Reinforcement Learning/warehouse/envs/WarehouseEnv.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Reinforcement Learning/warehouse/envs/minigrid_env_mod.py" beforeDir="false" afterPath="$PROJECT_DIR$/Reinforcement Learning/warehouse/envs/minigrid_env_mod.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -28,7 +25,7 @@
   <component name="GithubPullRequestsUISettings">
     <option name="selectedUrlAndAccountId">
       <UrlAndAccount>
-        <option name="accountId" value="a00e3e31-835f-4c15-a456-1aaabab356af" />
+        <option name="accountId" value="34758ae4-bbfd-4caf-ab6a-d5a51e16f90a" />
         <option name="url" value="https://github.com/vickdini/ReinforcementLearning" />
       </UrlAndAccount>
     </option>
@@ -117,32 +114,45 @@
       <option name="project" value="LOCAL" />
       <updated>1674424433890</updated>
     </task>
-    <option name="localTasksCounter" value="5" />
+    <task id="LOCAL-00005" summary="Solved the agent's view subgrid and observations.">
+      <created>1674483921381</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1674483921382</updated>
+    </task>
+    <option name="localTasksCounter" value="6" />
     <servers />
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Changed to PyCharm and apparently fixed square around robot." />
     <MESSAGE value="Fixed the robot's view and deleted the old project files." />
     <MESSAGE value="Small update." />
-    <option name="LAST_COMMIT_MESSAGE" value="Small update." />
+    <MESSAGE value="Solved the agent's view subgrid and observations." />
+    <option name="LAST_COMMIT_MESSAGE" value="Solved the agent's view subgrid and observations." />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
       <breakpoints>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/Reinforcement Learning/warehouse/envs/minigrid_env_mod.py</url>
-          <line>162</line>
-          <option name="timeStamp" value="8" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/Reinforcement Learning/warehouse/envs/minigrid_env_mod.py</url>
-          <line>500</line>
+          <line>493</line>
           <option name="timeStamp" value="38" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/Reinforcement Learning/warehouse/envs/minigrid_env_mod.py</url>
-          <line>554</line>
+          <line>547</line>
           <option name="timeStamp" value="39" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/Reinforcement Learning/main.py</url>
+          <line>47</line>
+          <option name="timeStamp" value="42" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/Reinforcement Learning/main.py</url>
+          <line>43</line>
+          <option name="timeStamp" value="48" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
