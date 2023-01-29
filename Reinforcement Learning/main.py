@@ -11,7 +11,7 @@ import warehouse, model
 from ManualControl import ManualControl
 
 if __name__ == "__main__":
-    env = gym.make("WarehouseEnv", agent_pos=(2, 3), goal_pos=(4, 8))
+    env = gym.make("WarehouseEnv-v0", agent_pos=(3, 7), goal_pos=(4, 8))
     agent_view = False
 
     if agent_view:
@@ -35,16 +35,17 @@ if __name__ == "__main__":
        epsilon=1.0,
        eps_dec=1e-5,
        eps_min=1e-2)
-    '''
+
     for i in range(episodes):
         print("Episode:", i)
         score = 0
         done = False
-        stateTemp = env.reset()
-        state = state[0]
+        obs = env.reset()
+        grid = obs["grid"]
+        direction = obs["direction"]
         loss_ep = 0
         step = 0
-
+        '''
         for j in range(steps):
             a = agent.choose_action(t.FloatTensor(state).unsqueeze(0))
             action = tuple([a])  # action is a tuple of all agent actions
