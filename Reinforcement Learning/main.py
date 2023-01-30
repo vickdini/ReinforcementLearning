@@ -1,7 +1,11 @@
 from __future__ import annotations
 
+from time import sleep
+
 import gymnasium as gym
+import minigrid
 from minigrid.wrappers import ImgObsWrapper, RGBImgPartialObsWrapper
+from minigrid.utils.window import Window
 
 import torch as t
 from tensorboardX import SummaryWriter
@@ -9,6 +13,20 @@ import numpy as np
 
 import warehouse, model
 from ManualControl import ManualControl
+
+def observationToState(grid, direction):
+    state = []
+
+    for i in range(len(grid)):
+        if (grid[i] == None):
+            state.append(0)
+        elif (type(grid[i]) is minigrid.core.world_object.Wall):
+            state.append(-1)
+        elif (type(grid[i]) is minigrid.core.world_object.Goal):
+            state.append(1)
+    state.append(direction)
+
+    return state
 
 if __name__ == "__main__":
     env = gym.make("WarehouseEnv-v0", agent_pos=(3, 7), goal_pos=(4, 8))
@@ -27,9 +45,13 @@ if __name__ == "__main__":
     # eps_history = []
     # losses = []
 
+    window = Window("Project 2 - Vick Dini")
+    window.set_caption(env.mission)
+    window.show(block=False)
+
     agent = model.DQN(
        n_features=env.observation_space.n,
-       n_actions=env.action_space.n,
+       n_actions=env.action_space.n - 1,
        lr=1e-3,
        reward_decay=0.99,
        epsilon=1.0,
@@ -40,27 +62,40 @@ if __name__ == "__main__":
         print("Episode:", i)
         score = 0
         done = False
+
         obs = env.reset()
-        grid = obs["grid"]
-        direction = obs["direction"]
+        state = observationToState(obs["grid"], obs["direction"])
+        window.show_img(env.get_frame(agent_pov=agent_view))
+        sleep(0.1)
+
         loss_ep = 0
         step = 0
-        '''
-        for j in range(steps):
-            a = agent.choose_action(t.FloatTensor(state).unsqueeze(0))
-            action = tuple([a])  # action is a tuple of all agent actions
 
-            state_, reward, done, _ = env.step(action)
+        for j in range(steps):
+            action = agent.choose_action(t.FloatTensor(state).unsqueeze(0))
+            #action = tuple([a])  # action is a tuple of all agent actions
+
+            obs_, reward, done, truncated, u = env.step(action)
+            state_ = observationToState(obs_["grid"], obs_["direction"])
+
+            print(f"step={env.step_count}, reward={reward:.2f}")
             env.render()  # comment this line to train faster
-            state_ = state_[0]
-            reward = reward[0]
-            done = done[0]
+            window.show_img(env.get_frame(agent_pov=agent_view))
+            if done:
+                print("terminated!")
+                break
+            elif truncated:
+                print("truncated!")
+                break
+            sleep(0.1)
+            #state_ = state_[0]
 
             score += reward
-            loss = agent.learn(state, a, reward, state_)
+            loss = agent.learn(state, action, reward, state_)
             loss_ep += loss
             step += 1
             state = state_
+
 
         # loss_ep /= step
         # """scores.append(score)
@@ -72,8 +107,6 @@ if __name__ == "__main__":
 
     agent.save_model("./saved_models")
     env.destroy()
-    '''
 
-    manual_control = ManualControl(env, agent_view=agent_view, seed=None)
-    manual_control.start()
-
+    #manual_control = ManualControl(env, agent_view=agent_view, seed=None)
+    #manual_control.start()
