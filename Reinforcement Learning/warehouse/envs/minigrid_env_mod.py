@@ -34,7 +34,9 @@ class MiniGridEnvMod(gym.Env):
         # Turn left, turn right, move forward
         left = 0
         right = 1
-        forward = 2
+        up = 2
+        down = 3
+        stay = 4
         # Done completing task
         done = 6
 
@@ -506,31 +508,35 @@ class MiniGridEnvMod(gym.Env):
         terminated = False
         truncated = False
 
-        # Get the position in front of the agent
-        fwd_pos = self.front_pos
-
-        # Get the contents of the cell in front of the agent
-        fwd_cell = self.grid.get(*fwd_pos)
-
-        # Rotate left
+        # Set next cell to the left
         if action == self.actions.left:
-            self.agent_dir -= 1
-            if self.agent_dir < 0:
-                self.agent_dir += 4
+            # Get the contents of the cell in front of the agent
+            fwd_pos = self.agent_pos + np.array([-1, 0])
+            fwd_cell = self.grid.get(*fwd_pos)
 
-        # Rotate right
+        # Set next cell to the right
         elif action == self.actions.right:
-            self.agent_dir = (self.agent_dir + 1) % 4
+            # Get the contents of the cell in front of the agent
+            fwd_pos = self.agent_pos + np.array([1, 0])
+            fwd_cell = self.grid.get(*fwd_pos)
 
-        # Move forward
-        elif action == self.actions.forward:
-            if fwd_cell is None or fwd_cell.can_overlap():
-                self.agent_pos = tuple(fwd_pos)
-            if fwd_cell is not None and fwd_cell.type == "goal":
-                terminated = True
-                reward = self._reward()
-            if fwd_cell is not None and fwd_cell.type == "lava":
-                terminated = True
+        # Set next cell up
+        elif action == self.actions.up:
+            # Get the contents of the cell in front of the agent
+            fwd_pos = self.agent_pos + np.array([0, -1])
+            fwd_cell = self.grid.get(*fwd_pos)
+
+        # Set next cell to down
+        elif action == self.actions.down:
+            # Get the contents of the cell in front of the agent
+            fwd_pos = self.agent_pos + np.array([0, 1])
+            fwd_cell = self.grid.get(*fwd_pos)
+
+        # Stay in the same cell
+        elif action == self.actions.stay:
+            # Get the contents of the cell in front of the agent
+            fwd_pos = self.agent_pos
+            fwd_cell = self.grid.get(*fwd_pos)
 
         # Done action (not used by default)
         elif action == self.actions.done:
@@ -538,6 +544,15 @@ class MiniGridEnvMod(gym.Env):
 
         else:
             raise ValueError(f"Unknown action: {action}")
+
+        # Move robot
+        if fwd_cell is None or fwd_cell.can_overlap():
+            self.agent_pos = tuple(fwd_pos)
+        if fwd_cell is not None and fwd_cell.type == "goal":
+            terminated = True
+            reward = self._reward()
+        if fwd_cell is not None and fwd_cell.type == "lava":
+            terminated = True
 
         if self.step_count >= self.max_steps:
             truncated = True

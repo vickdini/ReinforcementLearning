@@ -97,7 +97,7 @@ class WarehouseEnv(MiniGridEnvMod):
             self.agent_pos = self._agent_default_pos
             self.grid.set(*self._agent_default_pos, None)
             # assuming random start direction
-            self.agent_dir = self._rand_int(0, 4)
+            self.agent_dir = 1
         else:
             self.place_agent()
 

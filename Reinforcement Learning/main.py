@@ -98,7 +98,7 @@ if __name__ == "__main__":
                 print("truncated!")
                 break
 
-            sleep(0.1)
+            sleep(0.01)
 
         # loss_ep /= step
         # """scores.append(score)
