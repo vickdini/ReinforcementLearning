@@ -12,7 +12,6 @@ from tensorboardX import SummaryWriter
 import numpy as np
 
 import warehouse, model
-from ManualControl import ManualControl
 
 def observationToState(grid, direction):
     state = []
@@ -29,7 +28,10 @@ def observationToState(grid, direction):
     return state
 
 if __name__ == "__main__":
-    env = gym.make("WarehouseEnv-v0", agent_pos=(3, 7), goal_pos=(4, 8))
+    episodes = 100
+    steps = 5000
+
+    env = gym.make("WarehouseEnv-v0", agent_pos=(2, 3), goal_pos=(4, 8), max_steps = steps)
     agent_view = False
 
     if agent_view:
@@ -39,8 +41,6 @@ if __name__ == "__main__":
 
     writer = SummaryWriter("./logs")
 
-    episodes = 100
-    steps = 5000
     # scores = []
     # eps_history = []
     # losses = []
@@ -110,6 +110,3 @@ if __name__ == "__main__":
 
     agent.save_model("./saved_models")
     env.destroy()
-
-    #manual_control = ManualControl(env, agent_view=agent_view, seed=None)
-    #manual_control.start()
