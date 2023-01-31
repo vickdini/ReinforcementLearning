@@ -46,7 +46,7 @@ if __name__ == "__main__":
     # losses = []
 
     window = Window("Project 2 - Vick Dini")
-    window.set_caption(env.mission)
+    window.set_caption(env.mission + "\nEpisode: 1")
     window.show(block=False)
 
     agent = model.DQN(
@@ -59,7 +59,7 @@ if __name__ == "__main__":
        eps_min=1e-2)
 
     for i in range(episodes):
-        print("Episode:", i)
+        print("Episode:", i + 1)
         score = 0
         done = False
 
@@ -73,22 +73,14 @@ if __name__ == "__main__":
 
         for j in range(steps):
             action = agent.choose_action(t.FloatTensor(state).unsqueeze(0))
-            #action = tuple([a])  # action is a tuple of all agent actions
 
             obs_, reward, done, truncated, u = env.step(action)
             state_ = observationToState(obs_["grid"], obs_["direction"])
 
             print(f"step={env.step_count}, reward={reward:.2f}")
-            env.render()  # comment this line to train faster
+            env.render()
+            window.set_caption(env.mission + "\nEpisode: " + str(i + 1) + "    Range: " + str(j))
             window.show_img(env.get_frame(agent_pov=agent_view))
-            if done:
-                print("terminated!")
-                break
-            elif truncated:
-                print("truncated!")
-                break
-            sleep(0.1)
-            #state_ = state_[0]
 
             score += reward
             loss = agent.learn(state, action, reward, state_)
@@ -96,6 +88,17 @@ if __name__ == "__main__":
             step += 1
             state = state_
 
+            if done:
+                print("terminated!")
+                window.set_caption(env.mission + "\nEpisode: " + str(i + 1) + "    Range: " + str(j) + "    Reward: " + str(score))
+                window.show_img(env.get_frame(agent_pov=agent_view))
+                sleep(0.5)
+                break
+            elif truncated:
+                print("truncated!")
+                break
+
+            sleep(0.1)
 
         # loss_ep /= step
         # """scores.append(score)
