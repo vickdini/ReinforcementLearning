@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from minigrid.core.grid import Grid
+from warehouse.envs.grid import Grid
 from minigrid.core.mission import MissionSpace
 from minigrid.core.world_object import Goal
 from warehouse.envs.minigrid_env_mod import MiniGridEnvMod
@@ -44,8 +44,9 @@ class WarehouseEnv(MiniGridEnvMod):
 
     """
 
-    def __init__(self, agent_pos=None, goal_pos=None, max_steps=100, **kwargs):
-        self._agent_default_pos = agent_pos
+    def __init__(self, agent1_pos=None, agent2_pos=None, goal_pos=None, max_steps=100, **kwargs):
+        self._agent1_default_pos = agent1_pos
+        self._agent2_default_pos = agent2_pos
         self._goal_default_pos = goal_pos
 
         # Grid size (in cells, per side): left border + 8 cells + right border
@@ -92,14 +93,23 @@ class WarehouseEnv(MiniGridEnvMod):
 
         self.grid.vert_wall(6, 5, length=4)
 
-        # Randomize the player start position and orientation
-        if self._agent_default_pos is not None:
-            self.agent_pos = self._agent_default_pos
-            self.grid.set(*self._agent_default_pos, None)
+        # Set the start position and orientation of agent 1
+        if self._agent1_default_pos is not None:
+            self.agent1_pos = self._agent1_default_pos
+            self.grid.set(*self._agent1_default_pos, None)
             # assuming random start direction
-            self.agent_dir = 1
+            self.agent1_dir = 1
         else:
-            self.place_agent()
+            self.place_agent1()
+
+        # Set the start position and orientation of agent 2
+        if self._agent2_default_pos is not None:
+            self.agent2_pos = self._agent2_default_pos
+            self.grid.set(*self._agent2_default_pos, None)
+            # assuming random start direction
+            self.agent2_dir = 1
+        else:
+            self.place_agent2()
 
         if self._goal_default_pos is not None:
             goal = Goal()

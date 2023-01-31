@@ -11,7 +11,7 @@ import numpy as np
 from gymnasium import spaces
 
 from minigrid.core.constants import COLOR_NAMES, DIR_TO_VEC, TILE_PIXELS
-from minigrid.core.grid import Grid
+from warehouse.envs.grid import Grid
 from minigrid.core.mission import MissionSpace
 from minigrid.core.world_object import Point, WorldObj
 from minigrid.utils.window import Window
@@ -111,8 +111,10 @@ class MiniGridEnvMod(gym.Env):
         self.see_through_walls = see_through_walls
 
         # Current position and direction of the agent
-        self.agent_pos: np.ndarray | tuple[int, int] = None
-        self.agent_dir: int = None
+        self.agent1_pos: np.ndarray | tuple[int, int] = None
+        self.agent1_dir: int = None
+        self.agent2_pos: np.ndarray | tuple[int, int] = None
+        self.agent2_dir: int = None
 
         # Current grid and mission and carrying
         self.grid = Grid(width, height)
@@ -128,22 +130,32 @@ class MiniGridEnvMod(gym.Env):
         super().reset(seed=seed)
 
         # Reinitialize episode-specific variables
-        self.agent_pos = (-1, -1)
-        self.agent_dir = -1
+        self.agent1_pos = (-1, -1)
+        self.agent1_dir = -1
+        self.agent2_pos = (-1, -1)
+        self.agent2_dir = -1
 
         # Generate a new random grid at the start of each episode
         self._gen_grid(self.width, self.height)
 
         # These fields should be defined by _gen_grid
         assert (
-            self.agent_pos >= (0, 0)
-            if isinstance(self.agent_pos, tuple)
-            else all(self.agent_pos >= 0) and self.agent_dir >= 0
+            self.agent1_pos >= (0, 0)
+            if isinstance(self.agent1_pos, tuple)
+            else all(self.agent1_pos >= 0) and self.agent1_dir >= 0
         )
 
-        # Check that the agent doesn't overlap with an object
-        start_cell = self.grid.get(*self.agent_pos)
-        assert start_cell is None or start_cell.can_overlap()
+        assert (
+            self.agent2_pos >= (0, 0)
+            if isinstance(self.agent2_pos, tuple)
+            else all(self.agent2_pos >= 0) and self.agent2_dir >= 0
+        )
+
+        # Check that the agents don't overlap with an object
+        start_cell1 = self.grid.get(*self.agent1_pos)
+        assert start_cell1 is None or start_cell1.can_overlap()
+        start_cell2 = self.grid.get(*self.agent2_pos)
+        assert start_cell2 is None or start_cell2.can_overlap()
 
         # Item picked up, being carried, initially nothing
         self.carrying = None
@@ -202,8 +214,12 @@ class MiniGridEnvMod(gym.Env):
         for j in range(self.grid.height):
 
             for i in range(self.grid.width):
-                if i == self.agent_pos[0] and j == self.agent_pos[1]:
-                    str += 2 * AGENT_DIR_TO_STR[self.agent_dir]
+                if i == self.agent1_pos[0] and j == self.agent1_pos[1]:
+                    str += 2 * AGENT_DIR_TO_STR[self.agent1_dir]
+                    continue
+
+                if i == self.agent2_pos[0] and j == self.agent2_pos[1]:
+                    str += 2 * AGENT_DIR_TO_STR[self.agent2_dir]
                     continue
 
                 c = self.grid.get(i, j)
@@ -349,7 +365,9 @@ class MiniGridEnvMod(gym.Env):
                 continue
 
             # Don't place the object where the agent is
-            if np.array_equal(pos, self.agent_pos):
+            if np.array_equal(pos, self.agent1_pos):
+                continue
+            if np.array_equal(pos, self.agent2_pos):
                 continue
 
             # Check if there is a filtering criterion
@@ -375,48 +393,91 @@ class MiniGridEnvMod(gym.Env):
         obj.init_pos = (i, j)
         obj.cur_pos = (i, j)
 
-    def place_agent(self, top=None, size=None, rand_dir=True, max_tries=math.inf):
+    def place_agent1(self, top=None, size=None, rand_dir=True, max_tries=math.inf):
         """
         Set the agent's starting point at an empty position in the grid
         """
 
-        self.agent_pos = (-1, -1)
+        self.agent1_pos = (-1, -1)
         pos = self.place_obj(None, top, size, max_tries=max_tries)
-        self.agent_pos = pos
+        self.agent1_pos = pos
 
         if rand_dir:
-            self.agent_dir = self._rand_int(0, 4)
+            self.agent1_dir = self._rand_int(0, 4)
+
+        return pos
+
+    def place_agent2(self, top=None, size=None, rand_dir=True, max_tries=math.inf):
+        """
+        Set the agent's starting point at an empty position in the grid
+        """
+
+        self.agent2_pos = (-1, -1)
+        pos = self.place_obj(None, top, size, max_tries=max_tries)
+        self.agent2_pos = pos
+
+        if rand_dir:
+            self.agent2_dir = self._rand_int(0, 4)
 
         return pos
 
     @property
-    def dir_vec(self):
+    def dir_vec1(self):
         """
         Get the direction vector for the agent, pointing in the direction
         of forward movement.
         """
 
         assert (
-            self.agent_dir >= 0 and self.agent_dir < 4
-        ), f"Invalid agent_dir: {self.agent_dir} is not within range(0, 4)"
-        return DIR_TO_VEC[self.agent_dir]
+            self.agent1_dir >= 0 and self.agent1_dir < 4
+        ), f"Invalid agent_dir: {self.agent1_dir} is not within range(0, 4)"
+        return DIR_TO_VEC[self.agent1_dir]
 
     @property
-    def right_vec(self):
+    def dir_vec2(self):
+        """
+        Get the direction vector for the agent, pointing in the direction
+        of forward movement.
+        """
+
+        assert (
+                self.agent2_dir >= 0 and self.agent2_dir < 4
+        ), f"Invalid agent_dir: {self.agent2_dir} is not within range(0, 4)"
+        return DIR_TO_VEC[self.agent2_dir]
+
+    @property
+    def right_vec1(self):
         """
         Get the vector pointing to the right of the agent.
         """
 
-        dx, dy = self.dir_vec
+        dx, dy = self.dir_vec1
         return np.array((-dy, dx))
 
     @property
-    def front_pos(self):
+    def right_vec2(self):
+        """
+        Get the vector pointing to the right of the agent.
+        """
+
+        dx, dy = self.dir_vec2
+        return np.array((-dy, dx))
+
+    @property
+    def front_pos1(self):
         """
         Get the position of the cell that is right in front of the agent
         """
 
-        return self.agent_pos + self.dir_vec
+        return self.agent1_pos + self.dir_vec1
+
+    @property
+    def front_pos2(self):
+        """
+        Get the position of the cell that is right in front of the agent
+        """
+
+        return self.agent2_pos + self.dir_vec2
 
     def get_view_coords(self, i, j):
         """
@@ -425,25 +486,36 @@ class MiniGridEnvMod(gym.Env):
         coordinates may be negative or outside of the agent's view size.
         """
 
-        ax, ay = self.agent_pos
-        dx, dy = self.dir_vec
-        rx, ry = self.right_vec
+        ax1, ay1 = self.agent1_pos
+        dx1, dy1 = self.dir_vec1
+        rx1, ry1 = self.right_vec1
+
+        ax2, ay2 = self.agent2_pos
+        dx2, dy2 = self.dir_vec2
+        rx2, ry2 = self.right_vec2
 
         # Compute the absolute coordinates of the top-left view corner
         sz = self.agent_view_size
         hs = self.agent_view_size // 2
-        tx = ax + (dx * (sz - 1)) - (rx * hs)
-        ty = ay + (dy * (sz - 1)) - (ry * hs)
+        tx1 = ax1 + (dx1 * (sz - 1)) - (rx1 * hs)
+        ty1 = ay1 + (dy1 * (sz - 1)) - (ry1 * hs)
+        tx2 = ax2 + (dx2 * (sz - 1)) - (rx2 * hs)
+        ty2 = ay2 + (dy2 * (sz - 1)) - (ry2 * hs)
 
-        lx = i - tx
-        ly = j - ty
+        lx1 = i - tx1
+        ly1 = j - ty1
+        lx2 = i - tx2
+        ly2 = j - ty2
 
         # Project the coordinates of the object relative to the top-left
         # corner onto the agent's own coordinate system
-        vx = rx * lx + ry * ly
-        vy = -(dx * lx + dy * ly)
+        vx1 = rx1 * lx1 + ry1 * ly1
+        vy1 = -(dx1 * lx1 + dy1 * ly1)
 
-        return vx, vy
+        vx2 = rx2 * lx2 + ry2 * ly2
+        vy2 = -(dx2 * lx2 + dy2 * ly2)
+
+        return vx1, vy1, vx2, vy2
 
     def get_view_exts(self, agent_view_size=None):
         """
@@ -454,13 +526,19 @@ class MiniGridEnvMod(gym.Env):
 
         agent_view_size = agent_view_size or self.agent_view_size
 
-        topX = self.agent_pos[0] - agent_view_size // 2
-        topY = self.agent_pos[1] - agent_view_size // 2
+        topX1 = self.agent1_pos[0] - agent_view_size // 2
+        topY1 = self.agent1_pos[1] - agent_view_size // 2
 
-        botX = topX + agent_view_size - agent_view_size // 2
-        botY = topY + agent_view_size - agent_view_size // 2
+        botX1 = topX1 + agent_view_size - agent_view_size // 2
+        botY1 = topY1 + agent_view_size - agent_view_size // 2
 
-        return (topX, topY, botX, botY)
+        topX2 = self.agent2_pos[0] - agent_view_size // 2
+        topY2 = self.agent2_pos[1] - agent_view_size // 2
+
+        botX2 = topX2 + agent_view_size - agent_view_size // 2
+        botY2 = topY2 + agent_view_size - agent_view_size // 2
+
+        return (topX1, topY1, botX1, botY1, topX2, topY2, botX2, botY2)
 
     def relative_coords(self, x, y):
         """
@@ -572,24 +650,27 @@ class MiniGridEnvMod(gym.Env):
         if agent_view_size is None, self.agent_view_size is used
         """
 
-        topX, topY, botX, botY = self.get_view_exts(self.agent_view_size)
+        topX1, topY1, botX1, botY1, topX2, topY2, botX2, botY2 = self.get_view_exts(self.agent_view_size)
 
         agent_view_size = agent_view_size or self.agent_view_size
 
-        grid = self.grid.slice(topX, topY, agent_view_size, agent_view_size)
+        grid1 = self.grid.slice(topX1, topY1, agent_view_size, agent_view_size)
+        vis_mask1 = np.ones(shape=(grid1.width, grid1.height), dtype=bool)
 
-        vis_mask = np.ones(shape=(grid.width, grid.height), dtype=bool)
+        grid2 = self.grid.slice(topX2, topY2, agent_view_size, agent_view_size)
+        vis_mask2 = np.ones(shape=(grid2.width, grid2.height), dtype=bool)
 
-        return grid, vis_mask
+        return grid1, vis_mask1, grid2, vis_mask2
 
     def gen_obs(self):
         """
         Generate the agent's view (partially observable, low-resolution encoding)
         """
 
-        grid, vis_mask = self.gen_obs_grid()
+        grid1, vis_mask1, grid2, vis_mask2 = self.gen_obs_grid()
 
-        obs = {"grid": grid.grid, "mask": vis_mask, "direction": self.agent_dir}
+        obs = {"grid1": grid1.grid, "mask1": vis_mask1, "direction1": self.agent1_dir,
+            "grid2": grid2.grid, "mask2": vis_mask2, "direction2": self.agent2_dir}
 
         return obs
 
@@ -614,16 +695,23 @@ class MiniGridEnvMod(gym.Env):
         Render a non-partial observation for visualization
         """
         # Compute which cells are visible to the agent
-        _, vis_mask = self.gen_obs_grid()
+        grid1, vis_mask1, grid2, vis_mask2 = self.gen_obs_grid()
 
         # Compute the world coordinates of the bottom-left corner
         # of the agent's view area
-        f_vec = self.dir_vec
-        r_vec = self.right_vec
-        top_left = (
-            self.agent_pos
-            + f_vec * (self.agent_view_size // 2)
-            - r_vec * (self.agent_view_size // 2)
+        f_vec1 = self.dir_vec1
+        f_vec2 = self.dir_vec2
+        r_vec1 = self.right_vec1
+        r_vec2 = self.right_vec2
+        top_left1 = (
+            self.agent1_pos
+            + f_vec1 * (self.agent_view_size // 2)
+            - r_vec1 * (self.agent_view_size // 2)
+        )
+        top_left2 = (
+            self.agent2_pos
+            + f_vec2 * (self.agent_view_size // 2)
+            - r_vec2 * (self.agent_view_size // 2)
         )
 
         # Mask of which cells to highlight
@@ -633,26 +721,33 @@ class MiniGridEnvMod(gym.Env):
         for vis_j in range(0, self.agent_view_size):
             for vis_i in range(0, self.agent_view_size):
                 # If this cell is not visible, don't highlight it
-                if not vis_mask[vis_i, vis_j]:
+                if not vis_mask1[vis_i, vis_j] and not vis_mask2[vis_i, vis_j]:
                     continue
 
                 # Compute the world coordinates of this cell
-                abs_i, abs_j = top_left - (f_vec * vis_j) + (r_vec * vis_i)
+                abs_i1, abs_j1 = top_left1 - (f_vec1 * vis_j) + (r_vec1 * vis_i)
+                abs_i2, abs_j2 = top_left2 - (f_vec2 * vis_j) + (r_vec2 * vis_i)
 
-                if abs_i < 0 or abs_i >= self.width:
+                if (abs_i1 < 0 or abs_i1 >= self.width) and (abs_i2 < 0 or abs_i2 >= self.width):
                     continue
-                if abs_j < 0 or abs_j >= self.height:
+                if (abs_j1 < 0 or abs_j1 >= self.height) and (abs_j2 < 0 or abs_j2 >= self.height):
                     continue
 
-                # Mark this cell to be highlighted
-                highlight_mask[abs_i, abs_j] = True
+                if (abs_i1 >= 0 and abs_i1 < self.width) and (abs_j1 >= 0 and abs_j1 < self.height):
+                    # Mark this cell to be highlighted
+                    highlight_mask[abs_i1, abs_j1] = True
+                if (abs_i2 >= 0 and abs_i2 < self.width) and (abs_j2 >= 0 and abs_j2 < self.height):
+                    # Mark this cell to be highlighted
+                    highlight_mask[abs_i2, abs_j2] = True
 
         # Render the whole grid
         img = self.grid.render(
             tile_size,
-            self.agent_pos,
-            self.agent_dir,
-            highlight_mask=highlight_mask if highlight else None,
+            self.agent1_pos,
+            self.agent2_pos,
+            self.agent1_dir,
+            self.agent2_dir,
+            highlight_mask=highlight_mask if highlight else None
         )
 
         return img

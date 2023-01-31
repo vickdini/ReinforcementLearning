@@ -31,7 +31,7 @@ if __name__ == "__main__":
     episodes = 100
     steps = 5000
 
-    env = gym.make("WarehouseEnv-v0", agent_pos=(2, 3), goal_pos=(4, 8), max_steps = steps)
+    env = gym.make("WarehouseEnv-v0", agent1_pos=(2, 3), agent2_pos=(7, 6), goal_pos=(4, 8), max_steps = steps)
     agent_view = False
 
     if agent_view:
@@ -64,7 +64,9 @@ if __name__ == "__main__":
         done = False
 
         obs = env.reset()
-        state = observationToState(obs["grid"], obs["direction"])
+        state1 = observationToState(obs["grid1"], obs["direction1"])
+        state2 = observationToState(obs["grid2"], obs["direction2"])
+        # state = state1 + state2
         window.show_img(env.get_frame(agent_pov=agent_view))
         sleep(0.1)
 
