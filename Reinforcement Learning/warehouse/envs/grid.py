@@ -227,19 +227,12 @@ class Grid:
                 cell = self.get(i, j)
 
                 agent1_here = np.array_equal(agent1_pos, (i, j))
-                assert highlight_mask is not None
-                tile_img = Grid.render_tile(
-                    cell,
-                    agent_dir=agent1_dir if agent1_here else None,
-                    highlight=highlight_mask[i, j],
-                    tile_size=tile_size,
-                )
-
                 agent2_here = np.array_equal(agent2_pos, (i, j))
+
                 assert highlight_mask is not None
                 tile_img = Grid.render_tile(
                     cell,
-                    agent_dir=agent2_dir if agent2_here else None,
+                    agent_dir=agent1_dir if (agent1_here or agent2_here) else None,
                     highlight=highlight_mask[i, j],
                     tile_size=tile_size,
                 )
