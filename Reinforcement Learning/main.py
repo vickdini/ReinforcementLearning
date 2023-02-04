@@ -13,7 +13,7 @@ import numpy as np
 
 import warehouse, model
 
-def observationToState(grid, direction):
+def observationToState(grid):
     state = []
 
     for i in range(len(grid)):
@@ -23,7 +23,6 @@ def observationToState(grid, direction):
             state.append(-1)
         elif (type(grid[i]) is minigrid.core.world_object.Goal):
             state.append(1)
-    state.append(direction)
 
     return state
 
@@ -49,7 +48,7 @@ if __name__ == "__main__":
     window.set_caption(env.mission + "\nEpisode: 1")
     window.show(block=False)
 
-    agent = model.DQN(
+    agent1 = model.DQN(
        n_features=env.observation_space.n,
        n_actions=env.action_space.n - 1,
        lr=1e-3,
@@ -58,15 +57,24 @@ if __name__ == "__main__":
        eps_dec=1e-5,
        eps_min=1e-2)
 
+    agent2 = model.DQN(
+        n_features=env.observation_space.n,
+        n_actions=env.action_space.n - 1,
+        lr=1e-3,
+        reward_decay=0.99,
+        epsilon=1.0,
+        eps_dec=1e-5,
+        eps_min=1e-2)
+
     for i in range(episodes):
         print("Episode:", i + 1)
         score = 0
-        done = False
+        done1 = False
 
         obs = env.reset()
-        state1 = observationToState(obs["grid1"], obs["direction1"])
-        state2 = observationToState(obs["grid2"], obs["direction2"])
-        # state = state1 + state2
+        state1 = observationToState(obs["grid1"])
+        state2 = observationToState(obs["grid2"])
+
         window.show_img(env.get_frame(agent_pov=agent_view))
         sleep(0.1)
 
@@ -74,29 +82,32 @@ if __name__ == "__main__":
         step = 0
 
         for j in range(steps):
-            action = agent.choose_action(t.FloatTensor(state).unsqueeze(0))
+            action1 = agent1.choose_action(t.FloatTensor(state1).unsqueeze(0))
+            action2 = agent2.choose_action(t.FloatTensor(state2).unsqueeze(0))
 
-            obs_, reward, done, truncated, u = env.step(action)
-            state_ = observationToState(obs_["grid"], obs_["direction"])
+            obs1_, reward1, done1, truncated1, u1 = env.step(action1, agentN=1)
+            state1_ = observationToState(obs1_["grid1"])
+            obs2_, reward2, done2, truncated2, u2 = env.step(action2, agentN=2)
+            state2_ = observationToState(obs2_["grid2"])
 
-            print(f"step={env.step_count}, reward={reward:.2f}")
+            print(f"step={env.step_count}, reward1={reward1:.2f}, reward2={reward2:.2f}")
             env.render()
             window.set_caption(env.mission + "\nEpisode: " + str(i + 1) + "    Range: " + str(j))
             window.show_img(env.get_frame(agent_pov=agent_view))
 
-            score += reward
-            loss = agent.learn(state, action, reward, state_)
+            score += reward1
+            loss = agent1.learn(state1, action1, reward1, state1_)
             loss_ep += loss
             step += 1
-            state = state_
+            state = state1_
 
-            if done:
+            if done1:
                 print("terminated!")
                 window.set_caption(env.mission + "\nEpisode: " + str(i + 1) + "    Range: " + str(j) + "    Reward: " + str(score))
                 window.show_img(env.get_frame(agent_pov=agent_view))
                 sleep(0.5)
                 break
-            elif truncated:
+            elif truncated1:
                 print("truncated!")
                 break
 
@@ -110,5 +121,5 @@ if __name__ == "__main__":
         # writer.add_scalar("epsilon", agent.epsilon, i)
         # writer.add_scalar("loss_ep", loss_ep, i)
 
-    agent.save_model("./saved_models")
+    agent1.save_model("./saved_models")
     env.destroy()
