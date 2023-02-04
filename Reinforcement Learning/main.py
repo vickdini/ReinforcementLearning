@@ -71,6 +71,8 @@ if __name__ == "__main__":
         score = 0
         done1 = False
         done2 = False
+        reward1 = 0
+        reward2 = 0
 
         obs = env.reset()
         state1 = observationToState(obs["grid1"])
@@ -85,25 +87,23 @@ if __name__ == "__main__":
         for j in range(steps):
             if not done1:
                 action1 = agent1.choose_action(t.FloatTensor(state1).unsqueeze(0))
-                obs1_, reward1, done1, truncated1, u1 = env.stepN(action1, agentN=1)
+                obs1_, reward1_, done1, truncated1, u1 = env.stepN(action1, 1, reward1)
                 state1_ = observationToState(obs1_["grid1"])
-                loss1 = agent1.learn(state1, action1, reward1, state1_)
+                loss1 = agent1.learn(state1, action1, reward1_, state1_)
                 state1 = state1_
+                reward1 = reward1_
             if not done2:
                 action2 = agent2.choose_action(t.FloatTensor(state2).unsqueeze(0))
-                obs2_, reward2, done2, truncated2, u2 = env.stepN(action2, agentN=2)
+                obs2_, reward2_, done2, truncated2, u2 = env.stepN(action2, 2, reward2)
                 state2_ = observationToState(obs2_["grid2"])
-                loss2 = agent2.learn(state2, action2, reward2, state2_)
+                loss2 = agent2.learn(state2, action2, reward2_, state2_)
                 state2 = state2_
+                reward2 = reward2_
 
             print(f"step={env.step_count}, reward1={reward1:.2f}, reward2={reward2:.2f}")
             env.render()
-            window.set_caption(env.mission + "\nEpisode: " + str(i + 1) + "    Range: " + str(j))
+            window.set_caption(env.mission + "\nEpisode: " + str(i + 1) + "    Range: " + str(j) + "    Reward1: " + str(reward1) + "    Reward2: " + str(reward2))
             window.show_img(env.get_frame(agent_pov=agent_view))
-
-            score += reward1 + reward2
-            reward1 = 0
-            reward2 = 0
 
             loss_ep += loss1 + loss2
             loss1 = 0
@@ -113,7 +113,8 @@ if __name__ == "__main__":
 
             if done1 and done2:
                 print("terminated!")
-                window.set_caption(env.mission + "\nEpisode: " + str(i + 1) + "    Range: " + str(j) + "    Reward: " + str(score))
+                score += reward1 + reward2
+                window.set_caption(env.mission + "\nEpisode: " + str(i + 1) + "    Range: " + str(j) + "    Combined reward: " + str(score))
                 print(f"step={env.step_count}, reward1={reward1:.2f}, reward2={reward2:.2f}, score={score:.2f}")
                 window.show_img(env.get_frame(agent_pov=agent_view))
                 sleep(0.5)

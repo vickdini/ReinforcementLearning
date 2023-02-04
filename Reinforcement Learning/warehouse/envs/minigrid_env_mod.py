@@ -579,10 +579,9 @@ class MiniGridEnvMod(gym.Env):
 
         return obs_cell is not None and obs_cell.type == world_cell.type
 
-    def stepN(self, action, agentN):
+    def stepN(self, action, agentN, reward):
         self.step_count += 1
 
-        reward = 0
         terminated = False
         truncated = False
 
@@ -634,11 +633,12 @@ class MiniGridEnvMod(gym.Env):
                 self.agent1_pos = tuple(fwd_pos)
             elif agentN == 2:
                 self.agent2_pos = tuple(fwd_pos)
+
+            reward -= 1
+
         if fwd_cell is not None and fwd_cell.type == "goal":
             terminated = True
-            reward = self._reward()
-        if fwd_cell is not None and fwd_cell.type == "lava":
-            terminated = True
+            reward += 100
 
         if self.step_count >= self.max_steps:
             truncated = True
