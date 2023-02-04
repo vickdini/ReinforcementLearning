@@ -10,40 +10,6 @@ from gymnasium import spaces
 
 class WarehouseEnv(MiniGridEnvMod):
 
-    """
-    ## Mission Space
-
-    "reach the goal"
-
-    ## Action Space
-
-    | Num | Name         | Action       |
-    |-----|--------------|--------------|
-    | 0   | left         | Turn left    |
-    | 1   | right        | Turn right   |
-    | 2   | forward      | Move forward |
-    | 3   | pickup       | Unused       |
-    | 4   | drop         | Unused       |
-    | 5   | toggle       | Unused       |
-    | 6   | done         | Unused       |
-
-    ## Observations
-
-    The observations consist of the part of the grid that the agent currently sees.
-
-    ## Rewards
-
-    A reward of '1' is given for success, and '0' for failure.
-
-    ## Termination
-
-    The episode ends if any one of the following conditions is met:
-
-    1. The agent reaches the goal.
-    2. Timeout (see `max_steps`).
-
-    """
-
     def __init__(self, agent1_pos=None, agent2_pos=None, goal_pos=None, max_steps=100, **kwargs):
         self._agent1_default_pos = agent1_pos
         self._agent2_default_pos = agent2_pos
