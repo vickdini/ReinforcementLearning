@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from time import sleep
+import warnings
 
 import gymnasium as gym
 import minigrid
@@ -27,26 +28,28 @@ def observationToState(grid):
     return state
 
 if __name__ == "__main__":
+    warnings.filterwarnings("ignore")
+
+    # Change this value to True to enable the GUI or False to disable it.
+    enableUI = False
+
     episodes = 100
     steps = 5000
 
     env = gym.make("WarehouseEnv-v0", agent1_pos=(2, 3), agent2_pos=(7, 6), goal_pos=(4, 8), max_steps = steps)
     agent_view = False
 
-    if agent_view:
-        print("Using agent view")
-        env = RGBImgPartialObsWrapper(env, env.tile_size)
-        env = ImgObsWrapper(env)
-
     writer = SummaryWriter("./logs")
 
-    # scores = []
-    # eps_history = []
-    # losses = []
+    scores = []
+    eps1_history = []
+    eps2_history = []
+    losses = []
 
-    window = Window("Project 2 - Vick Dini")
-    window.set_caption(env.mission + "\nEpisode: 1")
-    window.show(block=False)
+    if enableUI:
+        window = Window("Project 2 - Vick Dini")
+        window.set_caption(env.mission + "\nEpisode: 1")
+        window.show(block=False)
 
     agent1 = model.DQN(
        n_features=env.observation_space.n,
@@ -78,8 +81,9 @@ if __name__ == "__main__":
         state1 = observationToState(obs["grid1"])
         state2 = observationToState(obs["grid2"])
 
-        window.show_img(env.get_frame(agent_pov=agent_view))
-        sleep(0.1)
+        if enableUI:
+            window.show_img(env.get_frame(agent_pov=agent_view))
+            sleep(0.1)
 
         loss_ep = 0
         step = 0
@@ -100,10 +104,10 @@ if __name__ == "__main__":
                 state2 = state2_
                 reward2 = reward2_
 
-            print(f"step={env.step_count}, reward1={reward1:.2f}, reward2={reward2:.2f}")
             env.render()
-            window.set_caption(env.mission + "\nEpisode: " + str(i + 1) + "    Range: " + str(j) + "    Reward1: " + str(reward1) + "    Reward2: " + str(reward2))
-            window.show_img(env.get_frame(agent_pov=agent_view))
+            if enableUI:
+                window.set_caption(env.mission + "\nEpisode: " + str(i + 1) + "    Actions: " + str(j) + "    Reward1: " + str(reward1) + "    Reward2: " + str(reward2))
+                window.show_img(env.get_frame(agent_pov=agent_view))
 
             loss_ep += loss1 + loss2
             loss1 = 0
@@ -112,27 +116,34 @@ if __name__ == "__main__":
             step += 1
 
             if done1 and done2:
-                print("terminated!")
                 score += reward1 + reward2
-                window.set_caption(env.mission + "\nEpisode: " + str(i + 1) + "    Range: " + str(j) + "    Combined reward: " + str(score))
-                print(f"step={env.step_count}, reward1={reward1:.2f}, reward2={reward2:.2f}, score={score:.2f}")
-                window.show_img(env.get_frame(agent_pov=agent_view))
-                sleep(0.5)
+                print(f"> Terminated: steps = {env.step_count}, reward1 = {reward1:.2f}, reward2 = {reward2:.2f}, score = {score:.2f}")
+
+                if enableUI:
+                    window.set_caption(env.mission + "\nEpisode: " + str(i + 1) + "    Actions: " + str(j) + "    Combined reward: " + str(score))
+                    window.show_img(env.get_frame(agent_pov=agent_view))
+                    sleep(0.5)
+
                 break
             elif truncated1 or truncated2:
-                print("truncated!")
+                print("> Truncated")
                 break
 
-            sleep(0.01)
+            if enableUI: sleep(0.01)
 
-        # loss_ep /= step
-        # """scores.append(score)
-        # eps_history.append(agent.epsilon)
-        # losses.append(loss_ep)"""
-        # writer.add_scalar("SCORES", score, i)
-        # writer.add_scalar("epsilon", agent.epsilon, i)
-        # writer.add_scalar("loss_ep", loss_ep, i)
+        loss_ep /= step
+        scores.append(score)
+        eps1_history.append(agent1.epsilon)
+        eps2_history.append(agent2.epsilon)
+        losses.append(loss_ep)
+        writer.add_scalar("SCORES", score, i)
+        writer.add_scalar("epsilon1", agent1.epsilon, i)
+        writer.add_scalar("epsilon2", agent2.epsilon, i)
+        writer.add_scalar("loss_ep", loss_ep, i)
 
     agent1.save_model("./saved_models")
     agent2.save_model("./saved_models")
+
+    writer.close()
+
     env.destroy()

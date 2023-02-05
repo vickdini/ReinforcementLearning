@@ -638,7 +638,7 @@ class MiniGridEnvMod(gym.Env):
 
         if fwd_cell is not None and fwd_cell.type == "goal":
             terminated = True
-            reward += 100
+            reward += 1000
 
         if self.step_count >= self.max_steps:
             truncated = True
