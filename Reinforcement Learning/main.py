@@ -145,5 +145,3 @@ if __name__ == "__main__":
     agent2.save_model("./saved_models")
 
     writer.close()
-
-    env.destroy()
